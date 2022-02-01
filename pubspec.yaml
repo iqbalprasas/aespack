@@ -1,6 +1,6 @@
 name: aespack
 description: AES Encryption & Decryption (AES-CBC-PKCS5Padding)
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/iqbalprasas/aespack
 
 environment:
