@@ -30,7 +30,7 @@ var result = await Aespack.encrypt(text, key, iv) ?? '';
 // result is 'IOCQgs4aK+K4lVWSg/W81w=='
 ```
 
-### encrypt
+### decrypt
 ```
 import 'package:aespack/aespack.dart';
 ...
