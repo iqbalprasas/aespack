@@ -26,7 +26,7 @@ import 'package:aespack/aespack.dart';
 var text = 'Test';
 var key = '0102030405060708';
 var iv = '1112131415161718';
-var result = await Aespack.encrypt(text, key, iv) ?? '';
+var result = await Aespack.encrypt(text, key, iv);
 // result is 'IOCQgs4aK+K4lVWSg/W81w=='
 ```
 
@@ -38,6 +38,6 @@ import 'package:aespack/aespack.dart';
 var text = 'IOCQgs4aK+K4lVWSg/W81w==';
 var key = '0102030405060708';
 var iv = '1112131415161718';
-var result = await Aespack.decrypt(text, key, iv) ?? '';
+var result = await Aespack.decrypt(text, key, iv);
 // result is 'Test'
 ```
