@@ -1,5 +1,7 @@
 package com.prasas.aespack.aespack;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import java.nio.charset.StandardCharsets;
@@ -84,7 +86,11 @@ public class AespackPlugin implements FlutterPlugin, MethodCallHandler {
       SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
       IvParameterSpec iv = new IvParameterSpec(ivParameter.getBytes());
       cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
-      encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
+      } else {
+        encrypted = cipher.doFinal(text.getBytes("utf-8"));
+      }
       String cipherString = new BASE64Encoder().encode(encrypted);
 
       result.success(cipherString);
@@ -96,7 +102,12 @@ public class AespackPlugin implements FlutterPlugin, MethodCallHandler {
 
   public void decrypt(@NonNull String sSrc, @NonNull String secretKey, @NonNull String ivParameter, @NonNull Result result) {
     try {
-      byte[] raw = secretKey.getBytes(StandardCharsets.US_ASCII);
+      byte[] raw;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        raw = secretKey.getBytes(StandardCharsets.US_ASCII);
+      } else {
+        raw = secretKey.getBytes("ASCII");
+      }
       SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
       Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
       IvParameterSpec iv = new IvParameterSpec(ivParameter.getBytes());
@@ -105,9 +116,14 @@ public class AespackPlugin implements FlutterPlugin, MethodCallHandler {
       byte[] encrypted1 = new BASE64Decoder().decodeBuffer(sSrc);
 
       byte[] original = cipher.doFinal(encrypted1);
-      String originalString = new String(original, StandardCharsets.UTF_8);
-      result.success(originalString);
+      String originalString;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        originalString = new String(original, StandardCharsets.UTF_8);
+      } else {
+        originalString = new String(original, "utf-8");
+      }
 
+      result.success(originalString);
     } catch (Exception e) {
       e.printStackTrace();
       result.error("ERROR", e.getMessage(), e);
